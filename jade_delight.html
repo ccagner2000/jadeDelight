@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jade Delight</title>
+<style>
+	body {
+		text-align: center;
+		background-color: #f1f1f1;
+		border: #000000 2px solid;
+		margin: 35px;
+		padding: 25px;
+	}
+	p, h1, h2 {
+		text-align: center:
+		color: #ff6347;
+	}
+</style>
+</head>
+
+<body>
+<script language="javascript">
+
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 4.5),
+	new MenuItem("Sweet and Sour Pork", 6.25),
+	new MenuItem("Shrimp Lo Mein", 5.25),
+	new MenuItem("Moo Shi Chicken", 6.5),
+	new MenuItem("Fried Rice", 2.35)
+);
+
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+
+
+function updateTotal() 
+{
+	
+	let subtotal = 0;
+	let i = 0;
+	for(i; i < 5; i++) {
+		subtotal += Number(document.getElementsByName("cost")[i].value)
+	}
+	subtotal = subtotal.toFixed(2);
+	document.getElementById("subtotal").value = subtotal;
+
+	let massTax = Number(document.getElementById("subtotal").value) * 0.0625;
+	massTax = massTax.toFixed(2);
+	document.getElementById("tax").value = massTax;
+
+	let total = Number(document.getElementById("subtotal").value) +
+		        Number(document.getElementById("tax").value);
+    total = total.toFixed(2);
+    document.getElementById("total").value = total;
+}
+
+function updatePrices()
+{
+	document.getElementsByName("quan0")[0].addEventListener('change', (event) => {
+		let price0 = event.target.value;
+		price0 = price0 * 4.5;
+		price0 = price0.toFixed(2);
+		document.getElementsByName("cost")[0].value = price0;
+		updateTotal();
+	});
+
+	document.getElementsByName("quan1")[0].addEventListener('change', (event) => {
+		let price1 = event.target.value;
+		price1 = price1 * 6.25;
+		price1 = price1.toFixed(2);
+		document.getElementsByName("cost")[1].value = price1;
+		updateTotal();
+	});
+	
+	document.getElementsByName("quan2")[0].addEventListener('change', (event) => {
+		let price2 = event.target.value;
+		price2 = price2 * 5.25;
+		price2 = price2.toFixed(2);
+		document.getElementsByName("cost")[2].value = price2;
+		updateTotal();
+	});
+
+	document.getElementsByName("quan3")[0].addEventListener('change', (event) => {
+		let price3 = event.target.value;
+		price3 = price3 * 6.5;
+		price3 = price3.toFixed(2);
+		document.getElementsByName("cost")[3].value = price3;
+		updateTotal();
+	});
+
+	document.getElementsByName("quan4")[0].addEventListener('change', (event) => {
+		let price4 = event.target.value;
+		price4 = price4 * 2.35;
+		price4 = price4.toFixed(2);
+		document.getElementsByName("cost")[4].value = price4;
+		updateTotal();
+	});
+}
+
+function validate()
+{
+	var total = document.getElementById("total").value;
+	if (document.infoForm.lname == null ||
+		document.infoForm.lname.value == "") {
+		alert("No Last Name Entered");
+		document.infoForm.lname.focus();
+		return false;
+	} 
+	if (document.infoForm.phone == null ||
+		document.infoForm.phone.value == "") {
+		alert("No Phone Number Entered");
+		document.infoForm.phone.focus();
+		return false;
+	}
+	if (document.infoForm.p_or_d.value == "delivery") {
+		if (document.infoForm.street == null ||
+			document.infoForm.street.value == "") {
+			alert("No Street Entered for Delivery");
+			document.infoForm.street.focus();
+			return false;
+		}
+	    if (document.infoForm.city == null ||
+			document.infoForm.city.value == "") {
+			alert("No City Entered for Delivery");
+			document.infoForm.city.focus();
+			return false;
+		}
+	}
+	var time = new Date();
+	if (document.infoForm.p_or_d.value == "delivery") {
+		time.setMinutes(time.getMinutes() + 30);
+		document.write("<h2>Thanks for Ordering Jade Delight!</h2>");
+		document.write("<p>Total: $" + total + "</p>");
+		document.write("<p>Delivery Time: " + time.toLocaleTimeString() + "</p>");
+	} else if (document.infoForm.p_or_d.value == "pickup") {
+		time.setMinutes(time.getMinutes() + 15);
+		document.write("<h2>Thanks for Ordering Jade Delight!</h2>");
+		document.write("<p>Total: $" + total + "</p>");
+		document.write("<p>Ready Time: " + time.toLocaleTimeString() + "</p>");
+	}
+	return true;
+}
+</script>
+
+<h1>Jade Delight</h1>
+<form name="infoForm" onsubmit="return validate()">
+
+<p>First Name: <input type="text"  name='fname' /></p>
+<p>Last Name*:  <input type="text"  name='lname' /></p>
+<p>Street: <input type="text"  name='street' /></p>
+<p>City: <input type="text"  name='city' /></p>
+<p>Phone*: <input type="tel"  name='phone' pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" /></p>
+<small>Format: xxx-xxx-xxxx</small>
+<p> 
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked"/>Pickup  
+	<input type="radio"  name='p_or_d' value = 'delivery'/>
+	Delivery
+</p>
+<table border="0" cellpadding="3">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script language="javascript">
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++)
+  {
+	  s += "<tr><td>";
+	  s += makeSelect("quan" + i, 0, 10);
+	  s += "</td><td>" + menuItems[i].name + "</td>";
+	  s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+	  s += "<td>$<input type='text' name='cost'/></td></tr>";
+  }
+  document.writeln(s);
+  updatePrices();
+</script>
+</table>
+<p>Subtotal: 
+   $<input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p>Mass tax 6.25%:
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p>Total: $ <input type="text"  name='total' id="total" />
+</p>
+
+<input type = "submit" value = "Submit Order"/>
+
+</form>
+</body>
+</html>
